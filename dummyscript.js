@@ -13,7 +13,7 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("dummydata.csv", function(data) {
+d3.csv("data2.csv", function(data) {
 
   // group the data: one array for each value of the X axis.
   var sumstat = d3.nest()
@@ -21,8 +21,8 @@ d3.csv("dummydata.csv", function(data) {
     .entries(data);
 
   // Stack the data: each group will be represented on top of each other
-  var mygroups = ["Helen", "Amanda", "Ashley"] // list of group names
-  var mygroup = [1,2,3] // list of group names
+  var mygroups = ["ETH", "KEN", "RWA", "TZA", "UGA"] // list of group names
+  var mygroup = [0,1,2,3,4] // list of group names
   var stackedData = d3.stack()
     .keys(mygroup)
     .value(function(d, key){
@@ -40,7 +40,7 @@ d3.csv("dummydata.csv", function(data) {
 
   // Add Y axis
   var y = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return +d.n; })*1.2])
+    .domain([0, d3.max(data, function(d) { return +d.n; })*5.2])
     .range([ height, 0 ]);
   svg.append("g")
     .call(d3.axisLeft(y));
@@ -48,7 +48,7 @@ d3.csv("dummydata.csv", function(data) {
   // color palette
   var color = d3.scaleOrdinal()
     .domain(mygroups)
-    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+    .range(['#fa8c00','#007b63','#c71e1d','#008cb7','#7f4c7b'])
 
   // Show the areas
   svg
@@ -56,7 +56,7 @@ d3.csv("dummydata.csv", function(data) {
     .data(stackedData)
     .enter()
     .append("path")
-      .style("fill", function(d) { name = mygroups[d.key-1] ;  return color(name); })
+      .style("fill", function(d) { name = mygroups[d.key] ;  return color(name); })
       .attr("d", d3.area()
         .x(function(d, i) { return x(d.data.key); })
         .y0(function(d) { return y(d[0]); })
